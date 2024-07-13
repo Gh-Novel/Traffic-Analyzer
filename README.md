@@ -60,7 +60,20 @@ Real-Time Detection: The system processes the video and identifies vehicles that
 
 By allowing users to draw lines dynamically and in any direction, Traffic Analyzer ensures that lane definitions are accurate and adaptable to various road layouts and traffic conditions. This flexibility makes it a powerful tool for traffic enforcement and safety monitoring.
 
-# Speed Detection
+# Speed Detection : ![speed](https://github.com/user-attachments/assets/50c7c63b-7556-4762-bdaa-e8cbe0a89804)
+
+
+Traffic Analyzer incorporates an advanced Speed Detection feature, designed to measure the speed of vehicles accurately. This feature is optimized to work efficiently on both low-end and high-end GPUs, providing flexibility for various hardware configurations.
+
+# How It Works
+Upload Video: Users can upload their video feed to the application.
+Speed Calculation: The system processes the video and calculates the speed of each detected vehicle.
+Real-Time Analysis: For high-end GPUs, the system can process live video feeds and provide real-time speed data. For low-end GPUs, the system is optimized to process non-live videos efficiently without compromising accuracy.
+
+Key Benefits
+1) Optimized for Low-End GPUs: The speed detection algorithm is designed to work effectively on low-end GPUs, allowing users with limited hardware resources to still achieve accurate speed measurements.
+2 ) Real-Time Processing: For users with high-end GPUs, the system can handle live video feeds and provide real-time speed data, making it suitable for various use cases.
+Accurate Measurements: The algorithm ensures precise speed calculations, whether processing live feeds or non-live videos.
 # Segmetationn
 # Track using IP
 # All
