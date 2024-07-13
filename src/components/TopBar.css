@@ -1,0 +1,25 @@
+.top-bar {
+    display: flex;
+    background-color: #2a2a2a;
+    padding: 10px;
+  }
+  
+  .top-bar-button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    background-color: #3a3a3a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .top-bar-button:hover {
+    background-color: #4a4a4a;
+  }
+  
+  .top-bar-button:active {
+    background-color: #5a5a5a;
+  }
