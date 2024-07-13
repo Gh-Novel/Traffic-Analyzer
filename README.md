@@ -1,13 +1,13 @@
-#Traffic Analyzer
+# Traffic Analyzer
 Traffic Analyzer is a web application designed to analyze traffic using computer vision. The application offers several features to enhance traffic management and monitoring.
 
-#Features
+# Features
 Wrong Lane Detection: Identify vehicles that are driving in the wrong lane.
 Speed Detection: Measure the speed of vehicles in real-time.
 Segmentation: Segment different parts of the video feed for detailed analysis.
 Track using IP: Track vehicles using IP cameras (currently in development).
 
-#How It Works
+# How It Works
 Upload Video: Users can upload their video feed to the application.
 Dynamic ROI Drawing: Dynamically draw the Region of Interest (ROI) directly on the video.
 Line Creation: Create lines on the video to perfectly match your video feed for accurate analysis.
