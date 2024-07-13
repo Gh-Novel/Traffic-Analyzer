@@ -29,6 +29,9 @@ Traffic Analyzer is a powerful tool for better traffic management, with many mor
 
 ![count](https://github.com/user-attachments/assets/d9e2b3bb-1838-4e64-8d9d-9b141f069a67)
 
+![c](https://github.com/user-attachments/assets/db7c1a9f-418a-4eba-b3b9-0a9274ca311d)
+
+
 Vehicle Counting
 Traffic Analyzer offers a powerful vehicle counting feature, designed to provide accurate traffic data. This feature includes:
 
@@ -49,6 +52,9 @@ By allowing users to draw lines dynamically and in any direction, Traffic Analyz
 
 ![lane](https://github.com/user-attachments/assets/98d1db7f-dc01-4aa6-a3c9-f0a5fc3e3b8a)
 
+![sp](https://github.com/user-attachments/assets/47704ec9-2ad8-490a-8e20-c6ce6178bc9f)
+
+
 
 Wrong Lane Detection
 Traffic Analyzer includes a robust Wrong Lane Detection feature, which helps in identifying vehicles driving in the wrong lane. This feature enhances road safety by allowing authorities to monitor and take action against lane violations.
@@ -62,6 +68,7 @@ By allowing users to draw lines dynamically and in any direction, Traffic Analyz
 
 # Speed Detection : ![speed](https://github.com/user-attachments/assets/50c7c63b-7556-4762-bdaa-e8cbe0a89804)
 
+![sr](https://github.com/user-attachments/assets/6bfd9cce-b161-47b1-be32-4cd50ba13131)
 
 Traffic Analyzer incorporates an advanced Speed Detection feature, designed to measure the speed of vehicles accurately. This feature is optimized to work efficiently on both low-end and high-end GPUs, providing flexibility for various hardware configurations.
 
