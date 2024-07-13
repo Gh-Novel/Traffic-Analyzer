@@ -13,21 +13,23 @@ Dynamic ROI Drawing: Dynamically draw the Region of Interest (ROI) directly on t
 Line Creation: Create lines on the video to perfectly match your video feed for accurate analysis.
 These features allow for comprehensive traffic monitoring and management. The application can be a valuable tool for traffic management authorities, helping to improve road safety and efficiency.
 
-#Future Enhancements
+# Future Enhancements
 Accident Detection: Identify and alert about traffic accidents.
 Fire Detection: Detect fires on the road.
 Additional Features: Many other features for improved traffic management. 
 
-#Usage
+# Usage
 To use Traffic Analyzer, upload your video, draw the ROI, and create lines according to your video feed. Use the Track using IP feature to get feed and perform operations on them (in development).
 
 Traffic Analyzer is a powerful tool for better traffic management, with many more features to come.
 
 
 
-#Count The Vehicles: ![count](https://github.com/user-attachments/assets/d9e2b3bb-1838-4e64-8d9d-9b141f069a67)
+# Count The Vehicles:
 
-#Vehicle Counting
+![count](https://github.com/user-attachments/assets/d9e2b3bb-1838-4e64-8d9d-9b141f069a67)
+
+Vehicle Counting
 Traffic Analyzer offers a powerful vehicle counting feature, designed to provide accurate traffic data. This feature includes:
 
 1) Dynamic Line Drawing: Users can draw lines in any direction on the video feed. This flexibility ensures that the counting lines can be perfectly aligned with the specific layout and traffic flow of the video.
@@ -43,23 +45,25 @@ By allowing users to draw lines dynamically and in any direction, Traffic Analyz
 
 
 
-#Wrong Lane : ![lane](https://github.com/user-attachments/assets/98d1db7f-dc01-4aa6-a3c9-f0a5fc3e3b8a)
+# Wrong Lane :  
+
+![lane](https://github.com/user-attachments/assets/98d1db7f-dc01-4aa6-a3c9-f0a5fc3e3b8a)
 
 
 Wrong Lane Detection
 Traffic Analyzer includes a robust Wrong Lane Detection feature, which helps in identifying vehicles driving in the wrong lane. This feature enhances road safety by allowing authorities to monitor and take action against lane violations.
 
 #How It Works
-Upload Video: Users can upload their video feed to the application.
-Dynamic Line Drawing: Users can draw multiple lines in any direction on the video feed to define the lanes accurately.
+1) Upload Video: Users can upload their video feed to the application.
+2 ) Dynamic Line Drawing: Users can draw multiple lines in any direction on the video feed to define the lanes accurately.
 Real-Time Detection: The system processes the video and identifies vehicles that cross the defined lanes incorrectly, indicating a wrong lane usage.
 
 By allowing users to draw lines dynamically and in any direction, Traffic Analyzer ensures that lane definitions are accurate and adaptable to various road layouts and traffic conditions. This flexibility makes it a powerful tool for traffic enforcement and safety monitoring.
 
-#Speed Detection
-#Segmetationn
-Track using IP
-All
+# Speed Detection
+# Segmetationn
+# Track using IP
+# All
 
 
 
