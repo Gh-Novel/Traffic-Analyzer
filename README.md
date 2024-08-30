@@ -90,6 +90,12 @@ Accurate Measurements: The algorithm ensures precise speed calculations, whether
 All of these processes can be performed using an IP and Port number, which you simply need to provide in the input field. However, for now, the cameras must be connected to the same WiFi network. In a future update, we plan to leverage cloud technology, where the video stream will first be sent to the cloud. From there, with the use of IP addresses and secure login protocols, we'll be able to process the video feeds over much longer distances, without the need for the cameras to be on the same local network.
 
 
+![ip](https://github.com/user-attachments/assets/9025e782-216b-4a8e-bf60-1c061fa80655)
+
+I am using the IP Webcam app on my phone to simulate a security camera and create a network that streams the video via an IP and Port. I then connect both the computer and the camera (phone) to the same network, input the IP and Port into the web app, and draw the line to detect and count cars. The setup works smoothly.
+
+
+
 # All
 
 
