@@ -83,6 +83,13 @@ Key Benefits
 Accurate Measurements: The algorithm ensures precise speed calculations, whether processing live feeds or non-live videos.
 # Segmetationn
 # Track using IP
+
+
+![image](https://github.com/user-attachments/assets/129e359c-c92d-4ff4-9933-d062d162af94)
+
+All of these processes can be performed using an IP and Port number, which you simply need to provide in the input field. However, for now, the cameras must be connected to the same WiFi network. In a future update, we plan to leverage cloud technology, where the video stream will first be sent to the cloud. From there, with the use of IP addresses and secure login protocols, we'll be able to process the video feeds over much longer distances, without the need for the cameras to be on the same local network.
+
+
 # All
 
 
