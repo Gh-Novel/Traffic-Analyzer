@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, Request, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import shutil
 import cv2
 import os
@@ -10,17 +11,26 @@ import json
 import numpy as np
 import base64
 import asyncio
+import io
+from pydantic import BaseModel
+from typing import List
 from track import process_lines
 from Lane import process_wrong_lane
 from speed import process_speed_detection
+from track_ip import process_ip_stream, update_lines
+from Lane_ip import process_wrong_lane_ip
 
-app = FastAPI()
+import subprocess
 
 app = FastAPI()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Global variables
+f_name = None
+stream_task = None
 
 # Ensure the 'uploads' directory exists
 os.makedirs("uploads", exist_ok=True)
@@ -36,12 +46,86 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize the variable to hold the filename globally
-f_name = None
+class Line(BaseModel):
+    startX: float
+    startY: float
+    endX: float
+    endY: float
+
+class StreamRequest(BaseModel):
+    ip: str
+    port: int
+    lines: List[Line] = []
+    
+class IPPort(BaseModel):
+    ip: str
+    port: str
 
 @app.get("/")
 def read_index():
     return FileResponse(os.path.join(STATIC_DIR, 'index.html'))
+
+@app.get("/get_snapshot")
+async def get_snapshot(ip: str, port: int):
+    try:
+        cap = cv2.VideoCapture(f"http://{ip}:{port}/video")
+        ret, frame = cap.read()
+        if not ret:
+            raise HTTPException(status_code=400, detail="Failed to capture snapshot")
+        cap.release()
+        
+        _, buffer = cv2.imencode('.jpg', frame)
+        return StreamingResponse(io.BytesIO(buffer.tobytes()), media_type="image/jpeg")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+class Line(BaseModel):
+    startX: float
+    startY: float
+    endX: float
+    endY: float
+
+class StreamRequest(BaseModel):
+    ip: str
+    port: int
+    lines: List[Line] = []
+
+@app.post("/count_ip")
+async def count_ip_stream(request: Request):
+    try:
+        data = await request.json()
+        ip = data.get("ip")
+        port = data.get("port")
+        lines = data.get("lines", [])
+
+        if not ip or not port or not lines:
+            raise HTTPException(status_code=400, detail="IP, port, and lines are required")
+
+        return StreamingResponse(process_ip_stream(ip, port, lines), media_type="application/x-ndjson")
+    except Exception as e:
+        logger.error(f"Error processing IP stream: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/Lane_ip")
+async def process_wrong_lane_ip_endpoint(request: Request):
+    try:
+        data = await request.json()
+        
+        if not data.get("ip") or not data.get("port") or not data.get("roi") or not data.get("greenLine") or not data.get("redLine"):
+            raise HTTPException(status_code=400, detail="Missing required data")
+
+        return StreamingResponse(
+            process_wrong_lane_ip(data),
+            media_type="application/x-ndjson"
+        )
+    except Exception as e:
+        logger.error(f"Error processing wrong lane IP: {str(e)}")
+        logger.error(f"Error details: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 
 @app.post("/upload_video")
 async def upload_video(file: UploadFile = File(...)):
@@ -49,15 +133,12 @@ async def upload_video(file: UploadFile = File(...)):
     try:
         video_path = os.path.join("uploads", file.filename)
         
-        # Save the uploaded video file
         with open(video_path, "wb") as f:
             shutil.copyfileobj(file.file, f)
         logger.info(f"Video '{file.filename}' uploaded successfully.")
         
-        # Store the filename in a variable
         f_name = file.filename
         
-        # Take a snapshot of the first frame using OpenCV
         vidcap = cv2.VideoCapture(video_path)
         success, image = vidcap.read()
         if success:
@@ -142,10 +223,8 @@ async def process_speed(request: Request):
         logger.info(f"ROI: {roi_points}")
         logger.info(f"Distance: {distance_meters} meters")
 
-        # Convert roi_points to the format expected by process_speed_detection
         roi_points_np = np.float32([[point['x'], point['y']] for point in roi_points])
 
-        # Use the process_speed_detection function
         return StreamingResponse(process_speed_detection(video_path, roi_points_np, distance_meters), media_type="text/event-stream")
 
     except Exception as e:
@@ -178,8 +257,6 @@ async def process_generic(request: Request, mode: str):
         logger.info(f"Lines: {lines}")
         logger.info(f"Mode: {mode}")
 
-        # Here you would implement the specific processing for each mode
-        # For now, we'll just use the existing process_lines function
         return StreamingResponse(process_lines(lines, video_path), media_type="text/event-stream")
     except Exception as e:
         logger.error(f"Error processing {mode}: {str(e)}")
@@ -200,17 +277,63 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            # Process the received data
-            # For example, you could parse it as JSON
             parsed_data = json.loads(data)
-            
-            # Do something with the data
-            # For this example, we'll just echo it back
             await websocket.send_text(f"Received: {json.dumps(parsed_data)}")
     except WebSocketDisconnect:
         logger.info("WebSocket disconnected")
     except Exception as e:
         logger.error(f"WebSocket error: {str(e)}")
+
+
+@app.post("/process_stream")
+async def process_stream(request: StreamRequest):
+    try:
+        async def generate():
+            try:
+                async for frame_data in process_ip_stream(request.ip, request.port, request.lines):
+                    yield (json.dumps(frame_data) + "\n").encode('utf-8')
+            except Exception as e:
+                yield json.dumps({"error": str(e)}).encode('utf-8')
+
+        return StreamingResponse(generate(), media_type="application/x-ndjson")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/start_stream")
+async def start_stream(ip_port: IPPort):
+    try:
+        url = f"http://{ip_port.ip}:{ip_port.port}/video"
+        subprocess.Popen(['python', 'video_stream.py', url])
+        return {"message": "Stream started successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.post("/api/set_ip_port")
+async def set_ip_port(ip_port: IPPort):
+    try:
+        url = f"http://{ip_port.ip}:{ip_port.port}/video"
+        subprocess.Popen(['python', 'video_stream.py', url])
+        return {"message": "IP and Port set successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.post("/update_lines")
+async def update_lines_endpoint(request: Request):
+    try:
+        data = await request.json()
+        lines = data.get('lines', [])
+        if not lines:
+            raise HTTPException(status_code=400, detail="No lines provided")
+        
+        update_lines(lines)
+        return {"message": "Lines updated successfully"}
+    except Exception as e:
+        logger.error(f"Error updating lines: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
