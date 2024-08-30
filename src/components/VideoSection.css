@@ -1,0 +1,19 @@
+/* VideoSection.css */
+
+.video-section {
+  position: relative;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.controls input[type="color"] {
+  margin-right: 10px;
+}
+
+.controls input[type="range"] {
+  width: 100px;
+}
